@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey;
 public class Town implements Comparable <Town>, Parcelable {
 
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
     public String name;
@@ -29,8 +29,7 @@ public class Town implements Comparable <Town>, Parcelable {
 
 
     }
-    public Town(int id, String name){
-        this.id=id;
+    public Town(String name){
         this.name=name;
     }
 

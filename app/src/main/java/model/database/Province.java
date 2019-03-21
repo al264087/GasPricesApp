@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey;
 public class Province {
 
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
     public String name;
@@ -26,8 +26,7 @@ public class Province {
 
 
     }
-    public Province(int id, String name){
-        this.id=id;
+    public Province(String name){
         this.name=name;
     }
 }
