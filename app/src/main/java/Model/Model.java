@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import Model.database.Community;
-import Model.database.MyDao;
 import androidx.room.Room;
 import Model.database.DataBase;
 
@@ -30,7 +29,7 @@ public class Model implements IModel {
     public Model(Context context)
     {
         ctx = context;
-        dataBase = Room.databaseBuilder(context, DataBase.class, "BaseDeDatos").build();
+        dataBase = Room.databaseBuilder(context, DataBase.class, "DataBase").build();
         resources = context.getResources();
 
     }
@@ -45,6 +44,7 @@ public class Model implements IModel {
     }
 
     //Funcion de inserts  llamando al Dao con el asynktasks
+
     public void InsertsBD()
     {
         new AsyncTask<Void, Void, Void>() {
@@ -58,9 +58,10 @@ public class Model implements IModel {
     }
 //cada vez que toques cosas del dao, lo haces en un AsyncTask
     //On postExecute, para trabajar y relacionarse con la AsyncTask para que le de tiempo a obtener la información
+
     public void  LeerComunidades( )
     {
-        InputStream stream = resources.openRawResource(R.raw.Ciudades);
+        InputStream stream = resources.openRawResource(R.raw.towns);
         Scanner scanner = new Scanner(stream);
 
 

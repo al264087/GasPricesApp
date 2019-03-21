@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Community {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     public int id;
 
     public String name;

@@ -10,7 +10,7 @@
         android:id="@+id/Communitytext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Community"
+        android:text="@string/community"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.023"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -22,7 +22,7 @@
         android:id="@+id/Provinciatext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pronvincia "
+        android:text="@string/province"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -34,7 +34,7 @@
         android:id="@+id/TypeOfFuel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Type of fuel"
+        android:text="@string/type_of_fuel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.023"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -47,7 +47,7 @@
         android:id="@+id/TownText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Town"
+        android:text="@string/town"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -76,7 +76,7 @@
     <Spinner
         android:id="@+id/spinner0"
         android:layout_width="395dp"
-        android:layout_height="wrap_content"
+        android:layout_height="18dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,8 +88,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:text="AutoCompleteTextView"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TownText" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="144dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

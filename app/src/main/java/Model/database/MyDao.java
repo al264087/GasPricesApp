@@ -22,9 +22,9 @@ public interface MyDao {
 
 
     @Update
-    void updateProvince(Province provinces);
+    void updateProvince(Province province);
     @Delete
-    void deleteProvince(Province provinces);
+    void deleteProvince(Province province);
 
     @Update
     void updateCommunity(Community community);
@@ -32,20 +32,20 @@ public interface MyDao {
     void deleteCommunity(Community community);
 
     @Update
-    void updateTown(Town towns);
+    void updateTown(Town town);
     @Delete
-    void deleteTowns(Town towns);
+    void deleteTown(Town town);
 
 
 
-    @Query("SELECT * FROM Community")
-    Community[] allCommunities();
+    @Query("SELECT * FROM Community ORDER BY name")
+    List<Community>allCommunities();
 
-    @Query("SELECT * FROM Province WHERE  community_id == :community_id")
-    Province[] allProvinces(int community_id);
+    @Query("SELECT * FROM Province WHERE  community_id == :community_id ORDER BY name")
+    List<Province> allProvinces(int community_id);
 
-    @Query("SELECT * FROM Town WHERE  province_id == :province_id")
-    Town[] allTown(int province_id);
+    @Query("SELECT * FROM Town WHERE  province_id == :province_id ORDER BY name")
+    List<Town> allTown(int province_id);
 
 
 

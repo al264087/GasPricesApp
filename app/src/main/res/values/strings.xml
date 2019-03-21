@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GasPricesApp</string>
+    <string name="town">Town</string>
+    <string name="type_of_fuel">Type of fuel</string>
+    <string name="province">Province</string>
+    <string name="community">Community</string>
 </resources>
