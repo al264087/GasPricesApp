@@ -1,7 +1,6 @@
-package model.database;
+package Model.database;
 
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -18,8 +17,9 @@ public class Community {
     }
 
 
-    public Community(String name){
+    public Community(int id, String name){
 
+        this.id = id;
         this.name=name;
     }
 }

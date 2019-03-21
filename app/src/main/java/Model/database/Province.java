@@ -1,4 +1,4 @@
-package model.database;
+package Model.database;
 
 
 import androidx.room.Entity;
