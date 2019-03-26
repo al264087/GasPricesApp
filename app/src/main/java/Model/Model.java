@@ -15,6 +15,7 @@ import Model.database.Community;
 import Model.database.GasType;
 import Model.database.Province;
 import Model.database.Town;
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 import androidx.room.Room;
 import Model.database.DataBase;
 
@@ -116,7 +117,7 @@ public class Model implements IModel {
 
     }
 
-    public void LeerProvincias ()
+    public void  LeerProvincias ()
     {
         InputStream stream = resources.openRawResource(R.raw.provinces);
         Scanner scanner = new Scanner (stream);
@@ -129,6 +130,7 @@ public class Model implements IModel {
             Province province = new Province(Integer.parseInt(linea[0]), linea[1].toString());
             listaProvincias.add(province);
         }
+
     }
 
     public void LeerCiudades ()
