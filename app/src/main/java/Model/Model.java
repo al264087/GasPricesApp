@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import Model.database.Community;
+import Model.database.Province;
+import Model.database.Town;
 import androidx.room.Room;
 import Model.database.DataBase;
 
@@ -22,13 +24,15 @@ public class Model implements IModel {
    private Resources resources;
 
 
-    Context ctx;
+    Context contexto;
     DataBase dataBase;
     List<Community> listaComunidades = new ArrayList<>();
+    List<Town> listaCiudades  = new ArrayList<>();
+    List<Province> listaProvincias = new ArrayList<>();
 
     public Model(Context context)
     {
-        ctx = context;
+        contexto = context;
         dataBase = Room.databaseBuilder(context, DataBase.class, "DataBase").build();
         resources = context.getResources();
 
@@ -55,13 +59,36 @@ public class Model implements IModel {
                 return null;
             }
         }.execute();
+
+        new AsyncTask<Void, Void, Void>()
+        {
+            @Override
+            protected Void doInBackground(Void...voids)
+            {
+                LeerProvincias();
+                dataBase.myDao().insertProvinces(listaProvincias);
+                return null;
+            }
+        }.execute();
+
+        new AsyncTask<Void, Void, Void>()
+        {
+            @Override
+            protected Void doInBackground(Void...voids)
+            {
+                LeerCiudades();
+                dataBase.myDao().insertTowns(listaCiudades);
+                return null;
+            }
+        }.execute();
     }
+
 //cada vez que toques cosas del dao, lo haces en un AsyncTask
     //On postExecute, para trabajar y relacionarse con la AsyncTask para que le de tiempo a obtener la información
 
     public void  LeerComunidades( )
     {
-        InputStream stream = resources.openRawResource(R.raw.towns);
+        InputStream stream = resources.openRawResource(R.raw.communities);
         Scanner scanner = new Scanner(stream);
 
 
@@ -73,9 +100,40 @@ public class Model implements IModel {
             Community community = new Community(Integer.parseInt(linea[0]), linea[1].toString());
             listaComunidades.add(community);
         }
+
     }
 
-    //Repetir, se usan en el presenter
+    public void LeerProvincias ()
+    {
+        InputStream stream = resources.openRawResource(R.raw.provinces);
+        Scanner scanner = new Scanner (stream);
+
+        while(scanner.hasNextLine())
+        {
+            String lectura = scanner.nextLine();
+            String [] linea  = lectura.split("#");
+
+            Province province = new Province(Integer.parseInt(linea[0]), linea[1].toString());
+            listaProvincias.add(province);
+        }
+    }
+
+    public void LeerCiudades ()
+    {
+        InputStream stream = resources.openRawResource(R.raw.towns);
+        Scanner scanner = new Scanner (stream);
+
+        while(scanner.hasNextLine())
+        {
+            String lectura = scanner.nextLine();
+            String [] linea  = lectura.split("#");
+
+            Town town    = new Town(Integer.parseInt(linea[0]), linea[1].toString());
+            listaCiudades.add(town);
+        }
+    }
+
+    // se usan en el presenter
 
 
 

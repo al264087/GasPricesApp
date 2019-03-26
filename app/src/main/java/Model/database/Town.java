@@ -29,7 +29,8 @@ public class Town implements Comparable <Town>, Parcelable {
 
 
     }
-    public Town(String name){
+    public Town(int id, String name){//Añadido id a la clase Town
+        this.id = id;
         this.name=name;
     }
 
