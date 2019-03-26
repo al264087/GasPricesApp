@@ -1,0 +1,18 @@
+1#Gasolina de protección#GPR
+3#Gasolina98 #G98#
+4#Gasóleo A habitual# GOA#
+5#Nuevo gasóleo #ANGO#
+6#Gasóleo #BGOB#
+7#Gasóleo #CGOC#
+8#Biodiésel#BIO#
+9#Fuelóleo bajo índice azufre#FOB#
+10#Fuelóleo especial#FOE#
+11#Gasóleo para uso marítimo#MGO#
+12#Gasolina de aviación#GNAV#
+13#Queroseno de aviación JET_A1#JETA1#
+14#Queroseno de aviación JET_A2#JETA2#
+15#Gasolina 95#G95#
+16#Bioetanol#BIE#
+17#Gases licuados del petróleo#GLP#
+18#Gas natural comprimido#GNC#
+19#Gas natural licuado#GNL#

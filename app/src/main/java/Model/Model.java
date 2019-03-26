@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import Model.database.Community;
+import Model.database.GasType;
 import Model.database.Province;
 import Model.database.Town;
 import androidx.room.Room;
@@ -29,6 +30,7 @@ public class Model implements IModel {
     List<Community> listaComunidades = new ArrayList<>();
     List<Town> listaCiudades  = new ArrayList<>();
     List<Province> listaProvincias = new ArrayList<>();
+    List<GasType> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
 
     public Model(Context context)
     {
@@ -81,6 +83,17 @@ public class Model implements IModel {
                 return null;
             }
         }.execute();
+
+        new AsyncTask<Void, Void, Void>()
+        {
+            @Override
+            protected Void doInBackground(Void...voids)
+            {
+                LeerCiudades();
+                dataBase.myDao().insertGasTypes(listaGasolinas);
+                return null;
+            }
+        }.execute();
     }
 
 //cada vez que toques cosas del dao, lo haces en un AsyncTask
@@ -130,6 +143,21 @@ public class Model implements IModel {
 
             Town town    = new Town(Integer.parseInt(linea[0]), linea[1].toString());
             listaCiudades.add(town);
+        }
+    }
+
+    public void LeerGasofa()
+    {
+        InputStream stream = resources.openRawResource(R.raw.gasTypes);
+        Scanner scanner = new Scanner (stream);
+
+        while(scanner.hasNextLine())
+        {
+            String lectura = scanner.nextLine();
+            String [] linea  = lectura.split("#");
+
+            GasType gasType    = new GasType(Integer.parseInt(linea[0]), linea[1].toString(), linea[2].toString());
+            listaGasolinas.add(gasType);
         }
     }
 
