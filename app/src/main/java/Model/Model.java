@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 
+import com.android.volley.Response;
 import com.example.gaspricesapp.R;
 
 import java.io.InputStream;
@@ -15,92 +16,84 @@ import Model.database.Community;
 import Model.database.GasType;
 import Model.database.Province;
 import Model.database.Town;
-import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 import androidx.room.Room;
 import Model.database.DataBase;
 
 
 public class Model implements IModel {
 
-   static Model model;
-   private Resources resources;
+    private static Model instance = null;
+    private final Resources resources;
+    private static DataBase db;
 
 
-    Context contexto;
-    DataBase dataBase;
-    List<Community> listaComunidades = new ArrayList<>();
-    List<Town> listaCiudades  = new ArrayList<>();
-    List<Province> listaProvincias = new ArrayList<>();
-    List<GasType> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
 
-    public Model(Context context)
-    {
-        contexto = context;
-        dataBase = Room.databaseBuilder(context, DataBase.class, "DataBase").build();
-        resources = context.getResources();
+    private static List<Community> listaComunidades = new ArrayList<>();
+    private List<Town> listaCiudades = new ArrayList<>();
+    private List<Province> listaProvincias = new ArrayList<>();
+    private List<GasType> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
 
+
+    public static Model getInstance() {
+        return instance;
     }
 
     public static Model getInstance(Context context) {
 
-        if (model == null)
-        {
-            model = new Model(context);
+        if (instance == null) {
+            instance = new Model(context);
         }
-        return model;
+        return instance;
     }
 
-    //Funcion de inserts  llamando al Dao con el asynktasks
+    private Model(Context context) {
 
-    public void InsertsBD()
-    {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                LeerComunidades();
-                dataBase.myDao().insertCommunities(listaComunidades);
-                return null;
-            }
-        }.execute();
+        this.db = Room.databaseBuilder(context, DataBase.class, "DataBase").build();
+        this.resources = context.getResources();
 
-        new AsyncTask<Void, Void, Void>()
-        {
-            @Override
-            protected Void doInBackground(Void...voids)
-            {
-                LeerProvincias();
-                dataBase.myDao().insertProvinces(listaProvincias);
-                return null;
-            }
-        }.execute();
-
-        new AsyncTask<Void, Void, Void>()
-        {
-            @Override
-            protected Void doInBackground(Void...voids)
-            {
-                LeerCiudades();
-                dataBase.myDao().insertTowns(listaCiudades);
-                return null;
-            }
-        }.execute();
-
-        new AsyncTask<Void, Void, Void>()
-        {
-            @Override
-            protected Void doInBackground(Void...voids)
-            {
-                LeerCiudades();
-                dataBase.myDao().insertGasTypes(listaGasolinas);
-                return null;
-            }
-        }.execute();
     }
 
-//cada vez que toques cosas del dao, lo haces en un AsyncTask
-    //On postExecute, para trabajar y relacionarse con la AsyncTask para que le de tiempo a obtener la información
 
-    public void  LeerComunidades( )
+
+    public class RecoverCommunities extends AsyncTask<Void, Void, List<Community>> {
+
+        final Response.Listener<List<Community>> communitylistener;
+
+
+        public RecoverCommunities(Response.Listener<List<Community>> communitylistener) {
+            this.communitylistener = communitylistener;
+        }
+
+        @Override
+        protected List<Community> doInBackground(Void... voids) {
+            listaComunidades = db.myDao().allCommunities();
+            if (listaComunidades == null) {
+
+                RellenarComunidades();
+
+            }
+            return listaComunidades;
+
+        }
+
+        @Override
+        protected void onPostExecute(List<Community> listaComunidades) {
+
+            communitylistener.onResponse(listaComunidades);
+
+        }
+
+}
+
+@Override
+public void getCommunities(final List<Community> listaComunidades, final Response.Listener<List<Community>> communitylistener){
+
+        RecoverCommunities recoverCommunities = new RecoverCommunities(communitylistener);
+        recoverCommunities.execute();
+}
+
+
+    public void  RellenarComunidades()
     {
         InputStream stream = resources.openRawResource(R.raw.communities);
         Scanner scanner = new Scanner(stream);
@@ -111,9 +104,11 @@ public class Model implements IModel {
             String lectura = scanner.nextLine();
             String [] linea  = lectura.split("#");
 
-            Community community = new Community(Integer.parseInt(linea[0]), linea[1].toString());
+            Community community = new Community(Integer.parseInt(linea[0]), linea[1]);
             listaComunidades.add(community);
         }
+        scanner.close();
+        db.myDao().insertCommunities(listaComunidades);
 
     }
 
@@ -150,7 +145,7 @@ public class Model implements IModel {
 
     public void LeerGasofa()
     {
-        InputStream stream = resources.openRawResource(R.raw.gasTypes);
+        InputStream stream = resources.openRawResource(R.raw.gastypes);
         Scanner scanner = new Scanner (stream);
 
         while(scanner.hasNextLine())
@@ -163,7 +158,7 @@ public class Model implements IModel {
         }
     }
 
-    // se usan en el presenter
+
 
 
 

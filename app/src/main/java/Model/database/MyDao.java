@@ -17,8 +17,7 @@ public interface MyDao {
     public void insertProvinces(List<Province> provinces);
     @Insert
     public void insertTowns(List<Town> towns);
-    @Insert
-    public void insertGasTypes(List<GasType> gasTypes);
+
 
 
 
@@ -38,10 +37,7 @@ public interface MyDao {
     @Delete
     void deleteTown(Town town);
 
-    @Update
-    void updateGas(GasType gasType);
-    @Delete
-    void deleteGas(GasType gasType);
+
 
 
 
@@ -54,8 +50,6 @@ public interface MyDao {
     @Query("SELECT * FROM Town WHERE  province_id == :province_id ORDER BY name")
     List<Town> allTown(int province_id);
 
-    @Query("SELECT * FROM Town WHERE  province_id == :gas_id ORDER BY name")
-    List<GasType> allGas(int gas_id);
 
 
 
