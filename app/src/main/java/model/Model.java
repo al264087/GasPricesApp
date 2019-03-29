@@ -1,10 +1,11 @@
-package Model;
+package model;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.Log;
 
-import com.android.volley.Response;
+import com.example.gaspricesapp.Presenter;
 import com.example.gaspricesapp.R;
 
 import java.io.InputStream;
@@ -12,92 +13,106 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import Model.database.Community;
-import Model.database.GasType;
-import Model.database.Province;
-import Model.database.Town;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-import Model.database.DataBase;
+import model.database.Community;
+import model.database.DataBase;
+import model.database.GasType;
+import model.database.Province;
+import model.database.Town;
 
 
-public class Model implements IModel {
+public class Model extends AppCompatActivity implements IModel {
 
-    private static Model instance = null;
-    private final Resources resources;
-    private static DataBase db;
-
-
-
-    private static List<Community> listaComunidades = new ArrayList<>();
-    private List<Town> listaCiudades = new ArrayList<>();
-    private List<Province> listaProvincias = new ArrayList<>();
-    private List<GasType> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
+   private static Model model;
+   Presenter presenter;
+   private final Resources resources;
 
 
-    public static Model getInstance() {
-        return instance;
+    Context contexto;
+    DataBase dataBase;
+
+
+
+    List<Community> listaComunidades = new ArrayList<>();
+    List<Town> listaCiudades = new ArrayList<>();
+    List<Province> listaProvincias = new ArrayList<>();
+    List<GasType> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
+
+    List <String> stringComunidades = new ArrayList<>();
+    List <String> stringProvinces= new ArrayList<>();
+    List <String> stringTowns= new ArrayList<>();
+
+    private Model(Context context) {
+
+        contexto = context;
+        dataBase = Room.databaseBuilder(context, DataBase.class, "DataBase").build();
+        resources = context.getResources();
     }
 
     public static Model getInstance(Context context) {
 
-        if (instance == null) {
-            instance = new Model(context);
+        if (model == null)
+        {
+            model = new Model(context);
         }
-        return instance;
-    }
-
-    private Model(Context context) {
-
-        this.db = Room.databaseBuilder(context, DataBase.class, "DataBase").build();
-        this.resources = context.getResources();
-
+        return model;
     }
 
 
 
-    public class RecoverCommunities extends AsyncTask<Void, Void, List<Community>> {
 
-        final Response.Listener<List<Community>> communitylistener;
+    @Override
+    public List<String> SetCommunities()
+    {
+        return stringComunidades;
+    }
+
+    @Override
+    public void getPresenter(Presenter p){presenter = p;}
+
+    @Override
+    public List<String> SetCommunitiesList() {
+        return stringComunidades;
+    }
 
 
-        public RecoverCommunities(Response.Listener<List<Community>> communitylistener) {
-            this.communitylistener = communitylistener;
-        }
+    //public class RecoverCommunities extends AsyncTask<Void, Void, List<model.database.Community>> {
+    @Override
+    public void InsertsBDCommunities()
+    {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                LeerComunidades();
+                dataBase.myDao().insertCommunities(listaComunidades);
 
-        @Override
-        protected List<Community> doInBackground(Void... voids) {
-            listaComunidades = db.myDao().allCommunities();
-            if (listaComunidades == null) {
+                return null;
+            }
 
-                RellenarComunidades();
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                Log.d("Status", "Hasta aqui llego");
+               // presenter.onCommunitiesAvailable();
+                presenter.ShowCommunities();
 
             }
-            return listaComunidades;
+        }.execute();
 
-        }
-
-        @Override
-        protected void onPostExecute(List<Community> listaComunidades) {
-
-            communitylistener.onResponse(listaComunidades);
-
-        }
-
-}
-
-@Override
+/*@Override
 public void getCommunities(final List<Community> listaComunidades, final Response.Listener<List<Community>> communitylistener){
 
         RecoverCommunities recoverCommunities = new RecoverCommunities(communitylistener);
         recoverCommunities.execute();
-}
+}*/
 
+    }
 
-    public void  RellenarComunidades()
+    public void LeerComunidades()
     {
+
         InputStream stream = resources.openRawResource(R.raw.communities);
         Scanner scanner = new Scanner(stream);
-
 
         while(scanner.hasNextLine())
         {
@@ -106,9 +121,14 @@ public void getCommunities(final List<Community> listaComunidades, final Respons
 
             Community community = new Community(Integer.parseInt(linea[0]), linea[1]);
             listaComunidades.add(community);
+            stringComunidades.add(community.name);
+
+            Log.d("STATUS", "HE METIDO LAS COMUNIDADES");
+
         }
+        Log.d("STATUS", "cantidad: " +stringComunidades.size());
         scanner.close();
-        db.myDao().insertCommunities(listaComunidades);
+
 
     }
 
@@ -153,12 +173,19 @@ public void getCommunities(final List<Community> listaComunidades, final Respons
             String lectura = scanner.nextLine();
             String [] linea  = lectura.split("#");
 
-            GasType gasType    = new GasType(Integer.parseInt(linea[0]), linea[1].toString(), linea[2].toString());
+            GasType gasType = new GasType(Integer.parseInt(linea[0]), linea[1].toString(), linea[2].toString());
             listaGasolinas.add(gasType);
         }
     }
 
+    // se usan en el presenter
 
+/*
+    public void getPrices(Town town, GasType type,
+                   Response.Listener<List<StationPrice>> listListener,
+                   Response.ErrorListener errorListener) {
+// ...
+    }*/
 
 
 
