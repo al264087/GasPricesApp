@@ -56,7 +56,7 @@
         app:layout_constraintVertical_bias="0.38" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/spinnerFuell"
         android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -65,7 +65,7 @@
 
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/spinnerProvince"
         android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Provinciatext" />
 
     <Spinner
-        android:id="@+id/spinner0"
+        android:id="@+id/spinnerCommunity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

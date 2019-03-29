@@ -1,4 +1,4 @@
-package Model.database;
+package model.database;
 
 import java.util.List;
 
@@ -42,13 +42,17 @@ public interface MyDao {
 
 
     @Query("SELECT * FROM Community ORDER BY name")
-    List<Community>allCommunities();
+    //List<Community>allCommunities();
+    Community[] allCommunities();
 
-    @Query("SELECT * FROM Province WHERE  community_id == :community_id ORDER BY name")
-    List<Province> allProvinces(int community_id);
 
-    @Query("SELECT * FROM Town WHERE  province_id == :province_id ORDER BY name")
-    List<Town> allTown(int province_id);
+    @Query("SELECT * FROM Province  ORDER BY name")
+    //List<Province> allProvinces(int community_id);
+    Province[] allProvinces();
+
+    @Query("SELECT * FROM Town  ORDER BY name")
+    //List<Town> allTown(int province_id);
+    Town[] allTowns();
 
 
 

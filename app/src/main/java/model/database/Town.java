@@ -1,4 +1,4 @@
-package Model.database;
+package model.database;
 
 
 import android.os.Parcel;

@@ -1,17 +1,35 @@
 package com.example.gaspricesapp;
 
-import Model.IModel;
+import java.util.List;
 
-class Presenter {
+import model.Model;
+
+public class Presenter {
 
 
-   private static IModel model;
-   private static IView view;
 
-   public Presenter (IView view , IModel model)
-   {
-       this.view = view;
-       this.model = model;
-   }
+    private MainActivity view;
+    private Model model;
+
+
+    public Presenter(MainActivity view, Model model){
+        this.view=view;
+        this.model=model;
+
+
+
+        model.getPresenter(this);
+    }
+
+    public void InsertCommunities()
+    {
+        model.InsertsBDCommunities();
+    }
+
+    public void ShowCommunities()
+    {
+        List<String> c = model.SetCommunitiesList();
+        view.showCommunities(c);
+    }
 
 }

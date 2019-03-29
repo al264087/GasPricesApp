@@ -1,4 +1,4 @@
-package Model.database;
+package model.database;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -10,15 +10,14 @@ import androidx.room.PrimaryKey;
         childColumns = "name"), indices = @Index(value = {"gas_id"}))//Falta añadir una columna más
 
 
-public class GasType {
-
+public /*final static*/ class GasType {
 
 
     @PrimaryKey
-    public int id;
+    public static int id;
 
-    public String gas;
-    public String code;
+    public static String gas;
+    public static String code;
 
     public String toString() {
         return " " + gas + " ";
@@ -31,4 +30,4 @@ public class GasType {
         this.code = code;
     }
 
-    }
+}
