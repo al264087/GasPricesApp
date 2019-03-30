@@ -7,7 +7,7 @@ interface IView {
 
     void showCommunities(List<String> Communities);
 
-    void showProvinces(List<String> Provinces);
+    void showProvinces(int community_id, List<String> Provinces);
 
     void showTowns(List<String> Towns);
 }

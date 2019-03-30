@@ -1,11 +1,8 @@
 package model;
 
-import com.android.volley.Response;
 import com.example.gaspricesapp.Presenter;
 
 import java.util.List;
-
-import model.database.Community;
 
 public interface IModel {
 
@@ -17,6 +14,12 @@ public interface IModel {
 
     List<String> SetCommunitiesList();
 
+   // List<String> SetProvinces(); Version Comentada
+
+   // List<String> SetProvincesList(); Version Comentada
+
     //public class RecoverCommunities extends AsyncTask<Void, Void, List<model.database.Community>> {
     void InsertsBDCommunities();
+
+ //   void InsertsBDProvinces(); VersionComentada
 }

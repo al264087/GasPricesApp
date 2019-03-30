@@ -32,4 +32,19 @@ public class Presenter {
         view.showCommunities(c);
     }
 
+/*Version Comentada
+    public void InsertProvinces()
+    {
+        model.InsertsBDProvinces();
+    }
+
+
+    public void ShowProvinces()
+    {
+        int i = 0; //i debe ser igual al id de la comunidad
+        List<String> p = model.SetProvincesList();
+        view.showProvinces(i, p);
+    }
+    */
+
 }

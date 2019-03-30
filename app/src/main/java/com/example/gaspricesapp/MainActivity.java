@@ -1,7 +1,6 @@
 package com.example.gaspricesapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements IView  {
         presenter = new Presenter(this, model);
         // Aqui se inicia la llamada a la lista de comunidades
         presenter.InsertCommunities();
+        //presenter.InsertProvinces();//Version Comentada
 
 
 
@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements IView  {
 
         String [] com = communities.toArray(new String[communities.size()]);
 
-        Log.d("STATE", ""+ "SHOWCOMMUNITIES" + communities.size());
-        //
+       // Log.d("STATE", ""+ "SHOWCOMMUNITIES" + communities.size());
+
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,com);
         communitySpinner.setAdapter(adapter);
 
@@ -72,8 +72,27 @@ public class MainActivity extends AppCompatActivity implements IView  {
 
     }
 
+
+
     @Override
-    public void showProvinces(List<String> Provinces) {
+    public void showProvinces(int community_id, List<String> provinces) {
+
+        String [] pro = provinces.toArray(new String[provinces.size()]);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,pro);
+        provinceSpinner.setAdapter(adapter); //Corroborar
+
+        provinceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               //  presenter.InsertProvinces(position+1); //Version Comentada
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                  //presenter.InsertProvinces(1);  // Versión Comentada
+            }
+        });
+
 
     }
 

@@ -40,7 +40,7 @@ public class Model extends AppCompatActivity implements IModel {
     List<GasType> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
 
     List <String> stringComunidades = new ArrayList<>();
-    List <String> stringProvinces= new ArrayList<>();
+    List <String> stringProvincias= new ArrayList<>();
     List <String> stringTowns= new ArrayList<>();
 
     private Model(Context context) {
@@ -76,8 +76,14 @@ public class Model extends AppCompatActivity implements IModel {
         return stringComunidades;
     }
 
+   // @Override  Version Comentada
+    //public List<String> SetProvinces() {return stringProvincias;}
 
-    //public class RecoverCommunities extends AsyncTask<Void, Void, List<model.database.Community>> {
+   // @Override Version Comentada
+   // public List<String> SetProvincesList() {return stringProvincias;}
+
+
+
     @Override
     public void InsertsBDCommunities()
     {
@@ -98,15 +104,33 @@ public class Model extends AppCompatActivity implements IModel {
 
             }
         }.execute();
-
-/*@Override
-public void getCommunities(final List<Community> listaComunidades, final Response.Listener<List<Community>> communitylistener){
-
-        RecoverCommunities recoverCommunities = new RecoverCommunities(communitylistener);
-        recoverCommunities.execute();
-}*/
-
     }
+/*Version Comentada
+    @Override
+    public void InsertsBDProvinces()
+    {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                LeerProvincias();
+                dataBase.myDao().insertProvinces(listaProvincias);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                Log.d("Status", "Hasta aqui llego");
+                // presenter.onCommunitiesAvailable();
+                presenter.ShowProvinces();
+
+            }
+        }.execute();
+
+    }*/
+
+
+
+
 
     public void LeerComunidades()
     {
@@ -128,10 +152,11 @@ public void getCommunities(final List<Community> listaComunidades, final Respons
         }
         Log.d("STATUS", "cantidad: " +stringComunidades.size());
         scanner.close();
-
-
     }
 
+
+
+/*  Versión Comentada
     public void  LeerProvincias ()
     {
         InputStream stream = resources.openRawResource(R.raw.provinces);
@@ -145,8 +170,7 @@ public void getCommunities(final List<Community> listaComunidades, final Respons
             Province province = new Province(Integer.parseInt(linea[0]), linea[1].toString());
             listaProvincias.add(province);
         }
-
-    }
+    }*/
 
     public void LeerCiudades ()
     {

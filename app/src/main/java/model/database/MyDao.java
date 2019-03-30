@@ -50,6 +50,10 @@ public interface MyDao {
     //List<Province> allProvinces(int community_id);
     Province[] allProvinces();
 
+    @Query("SELECT * FROM Province WHERE id = community_id")
+    Province [] provinceCommunity();
+
+
     @Query("SELECT * FROM Town  ORDER BY name")
     //List<Town> allTown(int province_id);
     Town[] allTowns();
