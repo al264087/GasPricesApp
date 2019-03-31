@@ -22,6 +22,7 @@ public interface MyDao {
 
 
 
+
     @Update
     void updateProvince(Province province);
     @Delete

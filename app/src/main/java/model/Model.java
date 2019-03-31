@@ -17,16 +17,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import model.database.Community;
 import model.database.DataBase;
-import model.database.GasType;
+import model.database.GasTypes;
 import model.database.Province;
 import model.database.Town;
 
 
 public class Model extends AppCompatActivity implements IModel {
 
-   private static Model model;
-   Presenter presenter;
-   private final Resources resources;
+    private static Model model;
+    Presenter presenter;
+    private final Resources resources;
 
 
     Context contexto;
@@ -37,11 +37,12 @@ public class Model extends AppCompatActivity implements IModel {
     List<Community> listaComunidades = new ArrayList<>();
     List<Town> listaCiudades = new ArrayList<>();
     List<Province> listaProvincias = new ArrayList<>();
-    List<GasType> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
+    List<GasTypes> listaGasolinas = new ArrayList<>(); //Sacar los datos de la gasofa
 
     List <String> stringComunidades = new ArrayList<>();
     List <String> stringProvincias= new ArrayList<>();
     List <String> stringTowns= new ArrayList<>();
+    List <String> stringGasolinas = new ArrayList<>();
 
     private Model(Context context) {
 
@@ -76,11 +77,17 @@ public class Model extends AppCompatActivity implements IModel {
         return stringComunidades;
     }
 
-   // @Override  Version Comentada
-    //public List<String> SetProvinces() {return stringProvincias;}
+    @Override
+    public List<String> SetProvinces() {return stringProvincias;}
 
-   // @Override Version Comentada
-   // public List<String> SetProvincesList() {return stringProvincias;}
+    @Override
+    public List<String> SetProvincesList() {return stringProvincias;}
+
+    @Override
+    public List<String> SetGasTypes() {return stringGasolinas;}
+
+    @Override
+    public List<String> SetGasTypesList() {return stringGasolinas;}
 
 
 
@@ -99,20 +106,20 @@ public class Model extends AppCompatActivity implements IModel {
             @Override
             protected void onPostExecute(Void aVoid) {
                 Log.d("Status", "Hasta aqui llego");
-               // presenter.onCommunitiesAvailable();
+                // presenter.onCommunitiesAvailable();
                 presenter.ShowCommunities();
 
             }
         }.execute();
     }
-/*Version Comentada
+
     @Override
-    public void InsertsBDProvinces()
+    public void InsertsBDProvinces(final int id)
     {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                LeerProvincias();
+                LeerProvincias(id);
                 dataBase.myDao().insertProvinces(listaProvincias);
                 return null;
             }
@@ -126,10 +133,7 @@ public class Model extends AppCompatActivity implements IModel {
             }
         }.execute();
 
-    }*/
-
-
-
+    }
 
 
     public void LeerComunidades()
@@ -156,9 +160,11 @@ public class Model extends AppCompatActivity implements IModel {
 
 
 
-/*  Versión Comentada
-    public void  LeerProvincias ()
+
+    public void  LeerProvincias (final int id)
     {
+        listaProvincias.clear();
+        stringProvincias.clear();
         InputStream stream = resources.openRawResource(R.raw.provinces);
         Scanner scanner = new Scanner (stream);
 
@@ -167,10 +173,17 @@ public class Model extends AppCompatActivity implements IModel {
             String lectura = scanner.nextLine();
             String [] linea  = lectura.split("#");
 
-            Province province = new Province(Integer.parseInt(linea[0]), linea[1].toString());
-            listaProvincias.add(province);
+            Province province = new Province(Integer.parseInt(linea[0]), linea[1].toString(), Integer.parseInt(linea[2]));
+            String community_id = Integer.toString(id);
+            String provincia_id = Integer.toString(province.community_id);
+            if(community_id.equals(provincia_id)){
+                listaProvincias.add(province);
+                stringProvincias.add(province.name);
+            }
+
         }
-    }*/
+        scanner.close();
+    }
 
     public void LeerCiudades ()
     {
@@ -181,24 +194,11 @@ public class Model extends AppCompatActivity implements IModel {
         {
             String lectura = scanner.nextLine();
             String [] linea  = lectura.split("#");
+        //cOGER LA POSICION, ListaProvincias.get(posicion.id)
 
+         //   cp.toString()
             Town town    = new Town(Integer.parseInt(linea[0]), linea[1].toString());
             listaCiudades.add(town);
-        }
-    }
-
-    public void LeerGasofa()
-    {
-        InputStream stream = resources.openRawResource(R.raw.gastypes);
-        Scanner scanner = new Scanner (stream);
-
-        while(scanner.hasNextLine())
-        {
-            String lectura = scanner.nextLine();
-            String [] linea  = lectura.split("#");
-
-            GasType gasType = new GasType(Integer.parseInt(linea[0]), linea[1].toString(), linea[2].toString());
-            listaGasolinas.add(gasType);
         }
     }
 

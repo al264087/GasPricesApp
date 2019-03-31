@@ -10,6 +10,9 @@ interface IView {
     void showProvinces(int community_id, List<String> Provinces);
 
     void showTowns(List<String> Towns);
+
+
+    void showGasTypes();
 }
 
 
