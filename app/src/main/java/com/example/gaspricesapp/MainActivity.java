@@ -1,6 +1,9 @@
 package com.example.gaspricesapp;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements IView  {
     private Spinner provinceSpinner;
     private Spinner fuellSpinner;
 
-    AutoCompleteTextView towns;
+    AutoCompleteTextView townsTextView;
     private Presenter presenter;
     private Model model;
     private GasTypes gasTypes;
@@ -31,19 +34,14 @@ public class MainActivity extends AppCompatActivity implements IView  {
         provinceSpinner = findViewById(R.id.spinner1);
         fuellSpinner = findViewById(R.id.spinner2);
 
-        towns = findViewById(R.id.autoCompleteTextView);
+        townsTextView = findViewById(R.id.autoCompleteTextView);
         //showPrices = findViewById(R.id.showp);
-
 
         model = Model.getInstance(getApplicationContext());
         presenter = new Presenter(this, model);
         // Aqui se inicia la llamada a la lista de comunidades
         presenter.InsertCommunities();
-        //presenter.InsertProvinces();//Version Comentada
         showGasTypes();
-
-
-
 
     }
 
@@ -51,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements IView  {
     public void showCommunities(List<String> communities){
 
         String [] com = communities.toArray(new String[communities.size()]);
-
-       // Log.d("STATE", ""+ "SHOWCOMMUNITIES" + communities.size());
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,com);
         communitySpinner.setAdapter(adapter);
@@ -66,19 +62,12 @@ public class MainActivity extends AppCompatActivity implements IView  {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
-              //  presenter.InsertProvinces(1);
             }
         });
-
-
-
     }
 
-
-
     @Override
-    public void showProvinces(int community_id, List<String> provinces) {
+    public void showProvinces(List<String> provinces) {
 
         String [] pro = provinces.toArray(new String[provinces.size()]);
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,pro);
@@ -87,23 +76,40 @@ public class MainActivity extends AppCompatActivity implements IView  {
         provinceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               //  presenter.InsertTowns(position+1); //Version Comentada
+                Log.d("STATUS", "POSITION  :" + position);
+                  presenter.InsertTowns(position);
+                  townsTextView.setText("");
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+    @Override
+    public void showTowns( List<String> Towns) {
+        String [] twns = Towns.toArray(new String[Towns.size()]);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item,twns);
+        townsTextView.setAdapter(adapter);
+        townsTextView.showDropDown();
+
+        townsTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                  //presenter.InsertProvinces(1);  // Versión Comentada
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
-
-
     }
-
-    @Override
-    public void showTowns(List<String> Towns) {
-
-    }
-
     @Override
     public void showGasTypes()
     {
@@ -115,22 +121,16 @@ public class MainActivity extends AppCompatActivity implements IView  {
             stgt[i] = gtgt[i].name;
         }
 
-
-
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,stgt);
         fuellSpinner.setAdapter(adapter);
 
         fuellSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                //presenter.InsertProvinces(position + 1);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
-                //  presenter.InsertProvinces(1);
             }
 
         });

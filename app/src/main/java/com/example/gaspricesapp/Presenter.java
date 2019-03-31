@@ -1,23 +1,19 @@
 package com.example.gaspricesapp;
 
+import android.util.Log;
+
 import java.util.List;
 
 import model.Model;
 
 public class Presenter {
 
-
-
     private MainActivity view;
     private Model model;
-
 
     public Presenter(MainActivity view, Model model){
         this.view=view;
         this.model=model;
-
-
-
         model.getPresenter(this);
     }
 
@@ -32,7 +28,6 @@ public class Presenter {
         view.showCommunities(c);
     }
 
-
     public void InsertProvinces(int id)
     {
         model.InsertsBDProvinces(id);
@@ -41,10 +36,22 @@ public class Presenter {
 
     public void ShowProvinces()
     {
-        //Posible error aqui
-        int i = 0; //i debe ser igual al id de la comunidad
+
         List<String> p = model.SetProvincesList();
-        view.showProvinces(i, p);
+        view.showProvinces(p);
+    }
+
+    public void InsertTowns(int position)
+    {
+        Log.d("Status", "PresenterInserTowns llamando a model InserTownsBDT");
+        model.InsertsBDTowns(position);
+    }
+
+    public void ShowTowns()
+    {
+        List<String> t = model.SetTownsList();
+        Log.d("Status", "PresenterSowTowns llamando a model view.showTowns LA LISTA T" + t.size());
+        view.showTowns(t);
     }
 
 

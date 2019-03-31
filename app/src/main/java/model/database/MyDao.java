@@ -51,8 +51,12 @@ public interface MyDao {
     //List<Province> allProvinces(int community_id);
     Province[] allProvinces();
 
-    @Query("SELECT * FROM Province WHERE id = community_id")
-    Province [] provinceCommunity();
+    @Query("SELECT * FROM Province WHERE community_id = :com")
+    Province [] provinceCommunity(int com);
+
+    @Query("SELECT * FROM Town WHERE province_id = :com")
+    Town [] townProvince(int com);
+
 
 
     @Query("SELECT * FROM Town  ORDER BY name")

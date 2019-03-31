@@ -32,6 +32,8 @@ public class Model extends AppCompatActivity implements IModel {
     Context contexto;
     DataBase dataBase;
 
+    Province [] provinces;
+    Town [] towns;
 
 
     List<Community> listaComunidades = new ArrayList<>();
@@ -81,13 +83,39 @@ public class Model extends AppCompatActivity implements IModel {
     public List<String> SetProvinces() {return stringProvincias;}
 
     @Override
-    public List<String> SetProvincesList() {return stringProvincias;}
+    public List<String> SetProvincesList()
+    {
+        stringProvincias.clear();
+        for(int i = 0; i < provinces.length; i++)
+        {
+            stringProvincias.add(provinces[i].name);
+        }
+        return  stringProvincias;
+    }
 
     @Override
     public List<String> SetGasTypes() {return stringGasolinas;}
 
     @Override
     public List<String> SetGasTypesList() {return stringGasolinas;}
+
+    @Override
+    public List<String> SetTowns()
+    {
+        return stringTowns;
+    }
+
+    @Override
+    public List<String> SetTownsList()
+    {
+        stringTowns.clear();
+        for(int i = 0 ; i< towns.length; i++)
+        {
+            stringTowns.add(towns[i].name);
+        }
+        Log.d("STATUS", "en SET TOWNS LIST , STRINGTOWNS VALE:   "+ stringTowns);
+        return stringTowns;
+    }
 
 
 
@@ -114,27 +142,85 @@ public class Model extends AppCompatActivity implements IModel {
     }
 
     @Override
-    public void InsertsBDProvinces(final int id)
+    public void InsertsBDProvinces(final int id)//Revisar ese iDDDDDDDD
     {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                LeerProvincias(id);
-                dataBase.myDao().insertProvinces(listaProvincias);
+                if(listaProvincias.size() == 0)
+                {
+                    LeerProvincias();
+                    dataBase.myDao().insertProvinces(listaProvincias);
+                }
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                Log.d("Status", "Hasta aqui llego");
-                // presenter.onCommunitiesAvailable();
-                presenter.ShowProvinces();
+                extractProvincesList(id);
 
             }
         }.execute();
-
     }
 
+
+    public void extractProvincesList(final int id) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+              provinces =  dataBase.myDao().provinceCommunity(id);
+              return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+
+                // presenter.onCommunitiesAvailable();
+                presenter.ShowProvinces();
+            }
+        }.execute();
+    }
+
+    @Override
+    public void InsertsBDTowns(final int position) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if(listaCiudades.size() == 0)
+                {
+                    LeerCiudades();
+                    dataBase.myDao().insertTowns(listaCiudades);
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+
+                extractTownsList(position);
+
+            }
+        }.execute();
+    }
+
+    public void extractTownsList(final int position) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                towns = dataBase.myDao().townProvince(position);
+                Log.d("STATUS", "Towns:   " + towns.length);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                presenter.ShowTowns();
+
+            }
+        }.execute();
+    }
 
     public void LeerComunidades()
     {
@@ -151,17 +237,15 @@ public class Model extends AppCompatActivity implements IModel {
             listaComunidades.add(community);
             stringComunidades.add(community.name);
 
-            Log.d("STATUS", "HE METIDO LAS COMUNIDADES");
 
         }
-        Log.d("STATUS", "cantidad: " +stringComunidades.size());
         scanner.close();
     }
 
 
 
 
-    public void  LeerProvincias (final int id)
+    public void  LeerProvincias ()
     {
         listaProvincias.clear();
         stringProvincias.clear();
@@ -174,19 +258,17 @@ public class Model extends AppCompatActivity implements IModel {
             String [] linea  = lectura.split("#");
 
             Province province = new Province(Integer.parseInt(linea[0]), linea[1].toString(), Integer.parseInt(linea[2]));
-            String community_id = Integer.toString(id);
-            String provincia_id = Integer.toString(province.community_id);
-            if(community_id.equals(provincia_id)){
-                listaProvincias.add(province);
-                stringProvincias.add(province.name);
+            listaProvincias.add(province);
             }
 
-        }
         scanner.close();
     }
-
+    //Funcion que llama al método que genera el array de provincias
     public void LeerCiudades ()
     {
+        listaCiudades.clear();
+        stringTowns.clear();
+
         InputStream stream = resources.openRawResource(R.raw.towns);
         Scanner scanner = new Scanner (stream);
 
@@ -194,12 +276,13 @@ public class Model extends AppCompatActivity implements IModel {
         {
             String lectura = scanner.nextLine();
             String [] linea  = lectura.split("#");
-        //cOGER LA POSICION, ListaProvincias.get(posicion.id)
 
-         //   cp.toString()
-            Town town    = new Town(Integer.parseInt(linea[0]), linea[1].toString());
+            Town town = new Town(Integer.parseInt(linea[0]), linea[1].toString(), Integer.parseInt(linea[2]));
             listaCiudades.add(town);
-        }
+
+            }
+        scanner.close();
+
     }
 
     // se usan en el presenter
